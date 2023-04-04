@@ -24,7 +24,7 @@ const GrillaPersonajes = () => {
 
     return <div className="grilla-personajes">
         {
-            grilla.personajes.map((personaje) => (
+            grilla?.personajes?.map((personaje) => (
                 <TarjetaPersonaje personaje={personaje} key={personaje.id} />
             ))
         }

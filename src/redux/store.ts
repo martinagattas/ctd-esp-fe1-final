@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import grillaReducer from './grilla-slice';
+import favoritoReducer from './favorito-slice';
 
 const store = configureStore({
     reducer: {
-		grilla: grillaReducer
+		grilla: grillaReducer,
+		favoritos: favoritoReducer
     },
 });
 

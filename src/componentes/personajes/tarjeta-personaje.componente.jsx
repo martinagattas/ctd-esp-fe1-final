@@ -1,5 +1,6 @@
 import BotonFavorito from '../botones/boton-favorito.componente';
 import './tarjeta-personaje.css';
+import { useAppSelector } from '../../redux/hooks';
 
 /**
  * Tarjeta para cada personaje dentro de la grilla de personajes. 
@@ -10,12 +11,13 @@ import './tarjeta-personaje.css';
  * @returns un JSX element 
  */
 const TarjetaPersonaje = ({personaje}) => {
+    const listaFavoritos = useAppSelector((state) => state.favoritos);
 
     return <div className="tarjeta-personaje">
         <img src={personaje.image} alt={personaje.name} />
         <div className="tarjeta-personaje-body">
             <span>{personaje.name}</span>
-            <BotonFavorito esFavorito={false} />
+            <BotonFavorito esFavorito={listaFavoritos.favoritos.some(favorito => favorito.id === personaje.id) ? true : false} idFavorito={personaje.id}/>
         </div>
     </div>
 }
