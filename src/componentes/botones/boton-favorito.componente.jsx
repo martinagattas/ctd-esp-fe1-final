@@ -1,6 +1,6 @@
 import './boton-favorito.css';
 import { useAppDispatch } from '../../redux/hooks';
-import { handleFavorito } from '../../redux/favorito-slice';
+import { handleFavorito } from '../../redux/grilla-slice';
 
 /**
  * Boton que indica si un elemento es favorito o no, y da la posibilidad de marcarlo/desmarcarlo
@@ -10,15 +10,15 @@ import { handleFavorito } from '../../redux/favorito-slice';
  * 
  * @returns un JSX element 
  */
-const BotonFavorito = ({ esFavorito, onClick, idFavorito }) => {
+const BotonFavorito = ({ esFavorito, onClick }) => {
     const src = esFavorito ? "/imagenes/star-filled.png" : "/imagenes/star.png";
     const dispatch = useAppDispatch();
 
-    const toggleFavorito = (id, esFavorito) => {
-        dispatch(handleFavorito(id, esFavorito));
+    const toggleFavorito = (personaje) => {
+        dispatch(handleFavorito(personaje));
     }
 
-    return <div className="boton-favorito" onClick={() => toggleFavorito(idFavorito)}>
+    return <div className="boton-favorito" onClick={() => toggleFavorito(onClick)}>
         <img src={src} alt={"favorito"} />
     </div>
 }

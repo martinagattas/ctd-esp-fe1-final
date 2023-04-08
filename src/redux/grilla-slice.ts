@@ -8,8 +8,16 @@ interface Personaje {
 
 interface grillaInicial {
     personajes: Personaje[],
+    favoritos: Personaje[],
     loading: boolean,
     mensajeError: string
+};
+
+const initialState: grillaInicial = {
+    personajes: [],
+    favoritos: [],
+    loading: false,
+    mensajeError: ''
 };
 
 export const getPersonajes = createAsyncThunk(
@@ -21,16 +29,21 @@ export const getPersonajes = createAsyncThunk(
     }
 );
 
-const initialState: grillaInicial = {
-    personajes: [],
-    loading: false,
-    mensajeError: ''
-};
-
 const grillaSlice = createSlice({
     name: 'grilla',
     initialState,
-    reducers: {},
+    reducers: {
+        handleFavorito: (state, action) => {
+            if(!state.favoritos.find(favorito => favorito.id === action.payload.id)){
+                state.favoritos.push(action.payload);
+            } else{
+                state.favoritos = state.favoritos.filter(favorito => favorito.id !== action.payload.id);
+            }
+        },
+        borrarFavoritos: (state) => {
+            state.favoritos = initialState.favoritos;
+        }
+    },
     extraReducers: (builder) => {
     builder
         .addCase(getPersonajes.pending, (state) => {
@@ -47,4 +60,5 @@ const grillaSlice = createSlice({
     }
 });
 
+export const { handleFavorito, borrarFavoritos } = grillaSlice.actions;
 export default grillaSlice.reducer;
