@@ -9,21 +9,32 @@ interface Personaje {
 interface grillaInicial {
     personajes: Personaje[],
     favoritos: Personaje[],
+    input: string,
     loading: boolean,
-    mensajeError: string
+    error: string
 };
 
 const initialState: grillaInicial = {
     personajes: [],
     favoritos: [],
+    input: '',
     loading: false,
-    mensajeError: ''
+    error: ''
 };
 
 export const getPersonajes = createAsyncThunk(
     'grilla/personajes',
     async (page: number) => {
         const respuesta = await fetch(`https://rickandmortyapi.com/api/character/?page=${page}`);
+        const parseRespuesta = await respuesta.json();
+        return parseRespuesta.results;
+    }
+);
+
+export const getPersonajesFiltrados = createAsyncThunk(
+    'grilla/personaje',
+    async (name: string) => {
+        const respuesta = await fetch(`https://rickandmortyapi.com/api/character/?name=${name}`);
         const parseRespuesta = await respuesta.json();
         return parseRespuesta.results;
     }
@@ -42,23 +53,48 @@ const grillaSlice = createSlice({
         },
         borrarFavoritos: (state) => {
             state.favoritos = initialState.favoritos;
+        },
+        buscarPersonaje: (state, action) => {
+            state.input = action.payload;
+        },
+        borrarBusqueda: (state) => {
+            state.input = initialState.input;
         }
     },
     extraReducers: (builder) => {
     builder
         .addCase(getPersonajes.pending, (state) => {
             state.loading = true;
+            state.personajes = initialState.personajes;
+            state.error = initialState.error;
         })
         .addCase(getPersonajes.fulfilled, (state, action) => {
             state.loading = false;
             state.personajes = action.payload;
+            state.error = initialState.error;
         })
-        .addCase(getPersonajes.rejected, (state, action) => {
+        .addCase(getPersonajes.rejected, (state) => {
             state.loading = false;
-            state.mensajeError = 'Apa, no cargó'
+            state.personajes = initialState.personajes;
+            state.error = 'No se encontró ningún personaje';
+        })
+        .addCase(getPersonajesFiltrados.pending, (state) => {
+            state.loading = true;
+            state.personajes = initialState.personajes;
+            state.error = initialState.error;
+        })
+        .addCase(getPersonajesFiltrados.fulfilled, (state, action) => {
+            state.loading = false;
+            state.personajes = action.payload;
+            state.error = initialState.error;
+        })
+        .addCase(getPersonajesFiltrados.rejected, (state) => {
+            state.loading = false;
+            state.personajes = initialState.personajes;
+            state.error = 'No se encontró ningún personaje';
         })
     }
 });
 
-export const { handleFavorito, borrarFavoritos } = grillaSlice.actions;
+export const { handleFavorito, borrarFavoritos, buscarPersonaje, borrarBusqueda } = grillaSlice.actions;
 export default grillaSlice.reducer;

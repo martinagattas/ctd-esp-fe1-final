@@ -27,4 +27,4 @@ const PaginaFavoritos = () => {
     </div>
 }
 
-export default PaginaFavoritos
+export default PaginaFavoritos;
