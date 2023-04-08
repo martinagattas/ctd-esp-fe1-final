@@ -31,6 +31,14 @@ const PaginaInicio = () => {
         inputRef?.current?.focus();
     }, [page, dispatch]);
 
+    const handleProx = () => {
+        setPage(page + 1);
+    }
+
+    const handlePrev = () => {
+        setPage(page - 1);
+    }
+
     const limpiarFiltro = () => {
         setFiltro('');
         dispatch(borrarBusqueda());
@@ -44,9 +52,9 @@ const PaginaInicio = () => {
             <button className="danger" onClick={limpiarFiltro}>Limpiar filtro</button>
         </div>
         <Filtros inputRef={inputRef} busqueda={(e) => setFiltro(e.target.value)} value={filtro}/>
-        <Paginacion />
+        <Paginacion prev={handlePrev} prox={handleProx} page={page}/>
         <GrillaPersonajes personajes={personajes}/>
-        <Paginacion />
+        <Paginacion prev={handlePrev} prox={handleProx} page={page}/>
     </div>
 }
 
