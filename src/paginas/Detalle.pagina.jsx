@@ -1,6 +1,10 @@
 import "./Detalle.css";
 import BotonFavorito from "../componentes/botones/boton-favorito.componente";
 import TarjetaEpisodio from "../componentes/episodios/tarjeta-episodio.componente";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useEffect } from "react";
+import { getPersonaje } from "../redux/grilla-slice";
+import { useParams } from "react-router-dom";
 
 /**
  * Esta es la pagina de detalle. Aqui se puede mostrar la vista sobre el personaje seleccionado junto con la lista de episodios en los que aparece
@@ -15,25 +19,36 @@ import TarjetaEpisodio from "../componentes/episodios/tarjeta-episodio.component
  * @returns la pagina de detalle
  */
 const PaginaDetalle = () => {
+    const dispatch = useAppDispatch();
+    const personaje = useAppSelector(state => state.grilla.personaje);
+    const favoritos = useAppSelector(state => state.grilla.favoritos);
+    const esFavorito = favoritos.find(favorito => favorito.id === personaje.id);
+    const {id} = useParams();
+
+    useEffect(() => {
+        dispatch(getPersonaje(id));
+    }, []);
+
     return <div className="container">
-        <h3>Rick Sanchez</h3>
+        <h3>{personaje.name}</h3>
         <div className={"detalle"}>
             <div className={"detalle-header"}>
-                <img src="https://rickandmortyapi.com/api/character/avatar/1.jpeg" alt="Rick Sanchez"/>
+                <img src={personaje.image} alt={personaje.image}/>
                 <div className={"detalle-header-texto"}>
-
-                    <p>Rick Sanchez</p>
-                    <p>Planeta: Earth</p>
-                    <p>Genero: Male</p>
+                    <p>{personaje.name}</p>
+                    <p>Planeta: {personaje.origin.name}</p>
+                    <p>Genero: {personaje.gender}</p>
                 </div>
-                <BotonFavorito esFavorito={false} />
+                <BotonFavorito esFavorito={esFavorito ? true : false} onClick={personaje}/>
             </div>
         </div>
         <h4>Lista de episodios donde apareció el personaje</h4>
         <div className={"episodios-grilla"}>
-            <TarjetaEpisodio />
-            <TarjetaEpisodio />
-            <TarjetaEpisodio />
+            {
+                personaje?.episode?.map((ep, index) => (
+                    <TarjetaEpisodio url={ep} key={index}/>
+                ))
+            }
         </div>
     </div>
 }

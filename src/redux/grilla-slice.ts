@@ -6,9 +6,23 @@ interface Personaje {
     image: string
 };
 
+interface PersonajeDetalle {
+    id: number,
+    name: string,
+    gender: string,
+    origin: {
+        name: string,
+        url: string
+    },
+    image: string,
+    episode: string[],
+    url: string
+};
+
 interface grillaInicial {
     personajes: Personaje[],
     favoritos: Personaje[],
+    personaje: PersonajeDetalle,
     input: string,
     loading: boolean,
     error: string
@@ -17,6 +31,18 @@ interface grillaInicial {
 const initialState: grillaInicial = {
     personajes: [],
     favoritos: [],
+    personaje: {
+        id: 0,
+        name: '',
+        gender: '',
+        origin: {
+            name: '',
+            url: ''
+        },
+        image: '',
+        episode: [],
+        url: ''
+    },
     input: '',
     loading: false,
     error: ''
@@ -32,11 +58,20 @@ export const getPersonajes = createAsyncThunk(
 );
 
 export const getPersonajesFiltrados = createAsyncThunk(
-    'grilla/personaje',
+    'grilla/personajesFiltrados',
     async (name: string) => {
         const respuesta = await fetch(`https://rickandmortyapi.com/api/character/?name=${name}`);
         const parseRespuesta = await respuesta.json();
         return parseRespuesta.results;
+    }
+);
+
+export const getPersonaje = createAsyncThunk(
+    'grilla/personaje',
+    async (id: number) => {
+        const respuesta = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
+        const parseRespuesta = await respuesta.json();
+        return parseRespuesta;
     }
 );
 
@@ -92,6 +127,11 @@ const grillaSlice = createSlice({
             state.loading = false;
             state.personajes = initialState.personajes;
             state.error = 'No se encontró ningún personaje';
+        })
+        .addCase(getPersonaje.fulfilled, (state, action) => {
+            state.loading = false;
+            state.personaje = action.payload;
+            state.error = initialState.error;
         })
     }
 });
