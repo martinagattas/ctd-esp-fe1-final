@@ -24,12 +24,12 @@ const PaginaInicio = () => {
     useEffect(() => {
         dispatch(buscarPersonaje(filtro));
         dispatch(getPersonajesFiltrados(filtro));
-    }, [filtro, dispatch]);
+    }, [filtro]);
 
     useEffect(() => {
         dispatch(getPersonajes(page));
         inputRef?.current?.focus();
-    }, [page, dispatch]);
+    }, [page]);
 
     const handleProx = () => {
         setPage(page + 1);
@@ -49,12 +49,12 @@ const PaginaInicio = () => {
     return <div className="container">
         <div className="actions">
             <h3>Catálogo de Personajes</h3>
-            <button className="danger" onClick={limpiarFiltro}>Limpiar filtro</button>
+            <button className="danger" onClick={() => limpiarFiltro()}>Limpiar filtro</button>
         </div>
         <Filtros inputRef={inputRef} busqueda={(e) => setFiltro(e.target.value)} value={filtro}/>
-        <Paginacion prev={handlePrev} prox={handleProx} page={page}/>
+        <Paginacion prev={() => handlePrev()} prox={() => handleProx()} page={page}/>
         <GrillaPersonajes personajes={personajes}/>
-        <Paginacion prev={handlePrev} prox={handleProx} page={page}/>
+        <Paginacion prev={() => handlePrev()} prox={() => handleProx()} page={page}/>
     </div>
 }
 

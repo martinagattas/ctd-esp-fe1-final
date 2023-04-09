@@ -3,12 +3,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 interface Personaje {
     id: number,
     name: string,
-    image: string
-};
-
-interface PersonajeDetalle {
-    id: number,
-    name: string,
     gender: string,
     origin: {
         name: string,
@@ -22,7 +16,7 @@ interface PersonajeDetalle {
 interface grillaInicial {
     personajes: Personaje[],
     favoritos: Personaje[],
-    personaje: PersonajeDetalle,
+    personaje: Personaje,
     input: string,
     loading: boolean,
     error: string
@@ -49,7 +43,7 @@ const initialState: grillaInicial = {
 };
 
 export const getPersonajes = createAsyncThunk(
-    'grilla/personajes',
+    'personajes',
     async (page: number) => {
         const respuesta = await fetch(`https://rickandmortyapi.com/api/character/?page=${page}`);
         const parseRespuesta = await respuesta.json();
@@ -58,7 +52,7 @@ export const getPersonajes = createAsyncThunk(
 );
 
 export const getPersonajesFiltrados = createAsyncThunk(
-    'grilla/personajesFiltrados',
+    'personajesFiltrados',
     async (name: string) => {
         const respuesta = await fetch(`https://rickandmortyapi.com/api/character/?name=${name}`);
         const parseRespuesta = await respuesta.json();
@@ -67,7 +61,7 @@ export const getPersonajesFiltrados = createAsyncThunk(
 );
 
 export const getPersonaje = createAsyncThunk(
-    'grilla/personaje',
+    'personaje',
     async (id: number) => {
         const respuesta = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
         const parseRespuesta = await respuesta.json();
