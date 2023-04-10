@@ -1,28 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Grilla } from "../types/grilla.types";
 
-interface Personaje {
-    id: number,
-    name: string,
-    gender: string,
-    origin: {
-        name: string,
-        url: string
-    },
-    image: string,
-    episode: string[],
-    url: string
-};
-
-interface grillaInicial {
-    personajes: Personaje[],
-    favoritos: Personaje[],
-    personaje: Personaje,
-    input: string,
-    loading: boolean,
-    error: string
-};
-
-const initialState: grillaInicial = {
+const initialState: Grilla = {
     personajes: [],
     favoritos: [],
     personaje: {
@@ -122,10 +101,20 @@ const grillaSlice = createSlice({
             state.personajes = initialState.personajes;
             state.error = 'No se encontró ningún personaje';
         })
+        .addCase(getPersonaje.pending, (state) => {
+            state.loading = true;
+            state.personajes = initialState.personajes;
+            state.error = initialState.error;
+        })
         .addCase(getPersonaje.fulfilled, (state, action) => {
             state.loading = false;
             state.personaje = action.payload;
             state.error = initialState.error;
+        })
+        .addCase(getPersonaje.rejected, (state) => {
+            state.loading = false;
+            state.personajes = initialState.personajes;
+            state.error = 'No se encontró el personaje';
         })
     }
 });

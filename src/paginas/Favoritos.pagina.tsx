@@ -3,25 +3,25 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { borrarFavoritos } from "../redux/grilla-slice";
 
 /**
- * Esta es la pagina de favoritos. Aquí se deberan ver todos los personajes marcados como favoritos
+ * Esta es la página de favoritos. Aquí se deberán ver todos los personajes marcados como favoritos.
  * 
  * Uso: 
  * ``` <PaginaFavoritos /> ```
  * 
- * @returns la pagina de favoritos
+ * @returns {JSX.Element} Página de favoritos
  */
 const PaginaFavoritos = () => {
-    const favoritos = useAppSelector(state => state.grilla.favoritos);
     const dispatch = useAppDispatch();
+    const favoritos = useAppSelector(state => state.grilla.favoritos);
 
-    const vaciarFavoritos = (favoritos) => {
-        dispatch(borrarFavoritos(favoritos));
+    const vaciarFavoritos = () => {
+        dispatch(borrarFavoritos());
     }
 
     return <div className="container">
         <div className="actions">
             <h3>Personajes Favoritos</h3>
-            <button className="danger" onClick={() => vaciarFavoritos(favoritos)}>Borrar todo</button>
+            <button className="danger" onClick={() => vaciarFavoritos()}>Borrar todo</button>
         </div>
         <GrillaPersonajes personajes={favoritos}/>
     </div>

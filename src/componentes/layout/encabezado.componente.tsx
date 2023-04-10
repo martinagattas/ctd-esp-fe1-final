@@ -6,10 +6,9 @@ import './encabezado.css';
  *
  * Uso: `<Encabezado />`
  *
- * @returns {JSX.Element}
+ * @returns {JSX.Element} Encabezado de la página
  */
 const Encabezado = () => {
-
     return <header>
             <div>
                 <div>
@@ -26,4 +25,4 @@ const Encabezado = () => {
     </header>
 }
 
-export default Encabezado
+export default Encabezado;

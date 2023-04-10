@@ -7,27 +7,27 @@ import { getPersonaje } from "../redux/grilla-slice";
 import { useParams } from "react-router-dom";
 
 /**
- * Esta es la pagina de detalle. Aqui se puede mostrar la vista sobre el personaje seleccionado junto con la lista de episodios en los que aparece
+ * Esta es la página de detalle. Aqui se puede mostrar la vista sobre el personaje seleccionado junto con la lista de episodios en los que aparece.
  * 
  * EL TRABAJO SOBRE ESTE ARCHIVO ES OPCIONAL Y NO ES REQUISITO DE APROBACION
- * 
- * 
  * 
  * Uso: 
  * ``` <PaginaDetalle /> ```
  * 
- * @returns la pagina de detalle
+ * @returns {JSX.Element} Página de detalle
  */
 const PaginaDetalle = () => {
     const dispatch = useAppDispatch();
     const personaje = useAppSelector(state => state.grilla.personaje);
     const favoritos = useAppSelector(state => state.grilla.favoritos);
     const esFavorito = favoritos.find(favorito => favorito.id === personaje.id);
-    const {id} = useParams();
+    const {id} = useParams<{id: string}>();
 
     useEffect(() => {
-        dispatch(getPersonaje(id));
-    }, []);
+        if(id){
+            dispatch(getPersonaje(+id));
+        }
+    }, [id]);
 
     return <div className="container">
         <h3>{personaje.name}</h3>
